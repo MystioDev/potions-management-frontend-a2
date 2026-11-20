@@ -1,6 +1,5 @@
 <script setup>
-import { effect } from "vue";
-import { createPotions, getPotions } from "../api/potion";
+import { createPotions, getPotions, deletePotions } from "../api/potion";
 </script>
 
 <script>
@@ -25,6 +24,11 @@ export default {
 
     async submitCreatePotion() {
       await createPotions(this.newPotion);
+      await this.loadPotions();
+    },
+
+    async removePotion(id) {
+      await deletePotions(id);
       await this.loadPotions();
     },
   },
@@ -56,6 +60,7 @@ export default {
         <th>Name</th>
         <th>Effect</th>
         <th>isDangerous</th>
+        <th>Műveletek</th>
       </tr>
     </thead>
     <tbody>
@@ -64,6 +69,7 @@ export default {
         <td>{{ potion.name }}</td>
         <td>{{ potion.effect }}</td>
         <td>{{ potion.isDangerous ? "igen" : "nem" }}</td>
+        <td><button v-on:click="removePotion(potion.id)">Törlés</button></td>
       </tr>
     </tbody>
   </table>

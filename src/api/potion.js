@@ -15,4 +15,11 @@ const createPotions = async (potion) => {
   return response.json();
 };
 
-export { getPotions, createPotions };
+const deletePotions = async (id) => {
+  const response = await fetch(API_URL + "/" + id, {
+    method: "DELETE",
+  });
+  return response.json();
+};
+
+export { getPotions, createPotions, deletePotions };
