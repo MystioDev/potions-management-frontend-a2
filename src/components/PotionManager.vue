@@ -1,5 +1,10 @@
 <script setup>
-import { createPotions, getPotions, deletePotions } from "../api/potion";
+import {
+  createPotions,
+  getPotions,
+  deletePotions,
+  updatePotions,
+} from "../api/potion";
 </script>
 
 <script>
@@ -10,6 +15,12 @@ export default {
       potions: [],
 
       newPotion: {
+        name: "",
+        effect: "",
+        isDangerous: false,
+      },
+      selectedPotions: {
+        id: -1,
         name: "",
         effect: "",
         isDangerous: false,
@@ -30,6 +41,15 @@ export default {
     async removePotion(id) {
       await deletePotions(id);
       await this.loadPotions();
+    },
+
+    async submitUpdatePotion() {
+      await updatePotions(this.selectedPotions);
+      await this.loadPotions();
+    },
+
+    selectPotion(id, name, effect, isDangerous) {
+      this.selectedPotions = { id, name, effect, isDangerous };
     },
   },
 
@@ -53,6 +73,23 @@ export default {
     <button type="submit">Létrehozás</button>
   </form>
 
+  <form @submit.prevent="submitUpdatePotion">
+    <label for="name">Name:</label>
+    <input v-model="selectedPotions.name" type="text" name="name" /><br />
+
+    <label for="effect">Effect:</label>
+    <input v-model="selectedPotions.effect" type="text" name="effect" /><br />
+
+    <label for="isDangerous">isDangerous</label>
+    <input
+      v-model="selectedPotions.isDangerous"
+      type="checkbox"
+      name="isDangerous"
+    />
+
+    <button type="submit">Módosítás</button>
+  </form>
+
   <table>
     <thead>
       <tr>
@@ -69,7 +106,21 @@ export default {
         <td>{{ potion.name }}</td>
         <td>{{ potion.effect }}</td>
         <td>{{ potion.isDangerous ? "igen" : "nem" }}</td>
-        <td><button v-on:click="removePotion(potion.id)">Törlés</button></td>
+        <td>
+          <button v-on:click="removePotion(potion.id)">Törlés</button>
+          <button
+            v-on:click="
+              selectPotion(
+                potion.id,
+                potion.name,
+                potion.effect,
+                potion.isDangerous,
+              )
+            "
+          >
+            Modositas
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>

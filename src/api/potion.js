@@ -22,4 +22,13 @@ const deletePotions = async (id) => {
   return response.json();
 };
 
-export { getPotions, createPotions, deletePotions };
+const updatePotions = async ({ id, name, effect, isDangerous }) => {
+  const response = await fetch(API_URL + "/" + id, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, effect, isDangerous }),
+  });
+  return response.json();
+};
+
+export { getPotions, createPotions, deletePotions, updatePotions };
